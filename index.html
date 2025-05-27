@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSM Structure Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .hierarchy {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .level {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            background: #f8f9fa;
+            position: relative;
+        }
+        
+        .level-1 { border-color: #4CAF50; background: #e8f5e9; }
+        .level-2 { border-color: #2196F3; background: #e3f2fd; }
+        .level-3 { border-color: #FF9800; background: #fff3e0; }
+        .level-4 { border-color: #9C27B0; background: #f3e5f5; }
+        .level-5 { border-color: #F44336; background: #ffebee; }
+        
+        .level-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .level-1 .level-title { color: #2E7D32; }
+        .level-2 .level-title { color: #1565C0; }
+        .level-3 .level-title { color: #E65100; }
+        .level-4 .level-title { color: #7B1FA2; }
+        .level-5 .level-title { color: #C62828; }
+        
+        .components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .component {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #ddd;
+        }
+        
+        .component:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        .level-1 .component { border-left-color: #4CAF50; }
+        .level-2 .component { border-left-color: #2196F3; }
+        .level-3 .component { border-left-color: #FF9800; }
+        .level-4 .component { border-left-color: #9C27B0; }
+        .level-5 .component { border-left-color: #F44336; }
+        
+        .component-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .component-desc {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .explanation {
+            background: #f0f4f8;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid #2196F3;
+        }
+        
+        .explanation h3 {
+            color: #1565C0;
+            margin-top: 0;
+        }
+        
+        .flow-diagram {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .flow-number {
+            background: #2196F3;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            border-bottom-color: #2196F3;
+            color: #2196F3;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tip-box {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tip-box h4 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #e65100;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Jira Service Management Structure</h1>
+            <p>Understanding how everything connects</p>
+        </div>
+        
+        <div class="content">
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('overview')">Overview</div>
+                <div class="tab" onclick="showTab('workflow')">Setup Workflow</div>
+                <div class="tab" onclick="showTab('details')">Detailed Guide</div>
+            </div>
+            
+            <div id="overview" class="tab-content active">
+                <div class="hierarchy">
+                    <div class="level level-1">
+                        <div class="level-title">🏗️ FOUNDATIONS (One-time Setup)</div>
+                        <p>These components are set up once and used across all your projects.</p>
+                        <div class="components">
+                            <div class="component">
+                                <div class="component-name">Work Types</div>
+                                <div class="component-desc">Types of work items (Bug, Story, Task, Epic)</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Work Type Hierarchy</div>
+                                <div class="component-desc">How work types relate to each other (Epic → Story → Task)</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Workflows</div>
+                                <div class="component-desc">Process steps (To Do → In Progress → Done)</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Custom Fields</div>
+                                <div class="component-desc">Additional fields for your tickets</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Screens</div>
+                                <div class="component-desc">Which fields are visible and when</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Priorities</div>
+                                <div class="component-desc">Available priority levels (High, Medium, Low)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="level level-2">
+                        <div class="level-title">🎨 SCHEMES (Reusable Templates)</div>
+                        <p>Schemes are reusable templates that bundle configurations for easy application to projects.</p>
+                        <div class="components">
+                            <div class="component">
+                                <div class="component-name">Work Type Schemes</div>
+                                <div class="component-desc">Collection of work types available in a project</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Workflow Schemes</div>
+                                <div class="component-desc">Maps which workflow applies to which work type</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Screen Schemes</div>
+                                <div class="component-desc">Defines which screen to use in different situations</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Field Configuration Schemes</div>
+                                <div class="component-desc">Field configurations mapped to work types</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Priority Schemes</div>
+                                <div class="component-desc">Available priorities for a project</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="level level-3">
+                        <div class="level-title">📋 PROJECT-SPECIFIC</div>
+                        <p>These settings are applied to individual projects and can vary between projects.</p>
+                        <div class="components">
+                            <div class="component">
+                                <div class="component-name">Work Type Screen Schemes</div>
+                                <div class="component-desc">Project-specific screen assignments for work types</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Permission Schemes</div>
+                                <div class="component-desc">Who can do what in this project</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Notification Schemes</div>
+                                <div class="component-desc">Who gets notified about what events</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Security Schemes</div>
+                                <div class="component-desc">Work item level security restrictions</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="level level-4">
+                        <div class="level-title">⚙️ ADVANCED FEATURES</div>
+                        <p>Additional functionality for more complex requirements and integrations.</p>
+                        <div class="components">
+                            <div class="component">
+                                <div class="component-name">Sub-tasks</div>
+                                <div class="component-desc">Break down larger work items into smaller pieces</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Time Tracking</div>
+                                <div class="component-desc">Log and track time spent on work items</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Work Item Linking</div>
+                                <div class="component-desc">Create relationships between work items</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Data Connections</div>
+                                <div class="component-desc">Integration with external systems and data sources</div>
+                            </div>
+                            <div class="component">
+                                <div class="component-name">Forms</div>
+                                <div class="component-desc">Customer-facing request forms</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="workflow" class="tab-content">
+                <div class="flow-diagram">
+                    <h3>🚀 Typical Setup Workflow</h3>
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <div>
+                            <strong>Define Work Types</strong><br>
+                            Create the types of tickets you need (Bug, Story, Task, Incident, etc.)
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <div>
+                            <strong>Create Workflows</strong><br>
+                            Define your process: To Do → In Progress → Review → Done
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">3</div>
+                        <div>
+                            <strong>Add Custom Fields</strong><br>
+                            Create additional fields like "Effort", "Customer", "Environment"
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">4</div>
+                        <div>
+                            <strong>Configure Screens</strong><br>
+                            Determine which fields are visible when creating/editing tickets
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">5</div>
+                        <div>
+                            <strong>Create Schemes</strong><br>
+                            Bundle your configurations into reusable schemes
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">6</div>
+                        <div>
+                            <strong>Apply to Projects</strong><br>
+                            Assign the schemes to your service projects
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>💡 Pro Tip for Beginners</h4>
+                    <p>Start with JSM's default configurations and only customize what you actually need. Most organizations can work perfectly fine with the standard workflows!</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Common Mistake</h4>
+                    <p>Don't try to configure everything at once. Start simple, get your team comfortable with the basics, then gradually add more complexity as needed.</p>
+                </div>
+            </div>
+            
+            <div id="details" class="tab-content">
+                <div class="explanation">
+                    <h3>🔍 Detailed Explanations</h3>
+                    
+                    <h4>What are "Schemes"?</h4>
+                    <p>Schemes are like <strong>templates or blueprints</strong>. Instead of configuring everything from scratch for each project, you create a scheme once and apply it to multiple projects. Think of them as reusable configuration packages.</p>
+                    
+                    <h4>When do you need what?</h4>
+                    <ul>
+                        <li><strong>New Project:</strong> Work Type Scheme, Workflow Scheme, Screen Scheme</li>
+                        <li><strong>New Fields:</strong> Custom Fields → Field Configuration → Field Configuration Scheme</li>
+                        <li><strong>Different Permissions:</strong> Permission Scheme</li>
+                        <li><strong>Different Notifications:</strong> Notification Scheme</li>
+                        <li><strong>Customer Portal:</strong> Forms and Data Connections</li>
+                    </ul>
+                    
+                    <h4>Typical Setup Order:</h4>
+                    <p>
+                        1. <strong>Create Foundation Components</strong> (Work Types, Workflows, Fields)<br>
+                        2. <strong>Create Schemes</strong> (bundle the foundation components)<br>
+                        3. <strong>Apply Schemes to Projects</strong> (assign to your service projects)
+                    </p>
+                    
+                    <h4>Real-World Example:</h4>
+                    <p>
+                        <strong>IT Support Team Setup:</strong><br>
+                        • Work Types: Incident, Service Request, Problem, Change<br>
+                        • Workflow: New → Assigned → In Progress → Resolved → Closed<br>
+                        • Custom Fields: Priority, Category, Affected Users, Resolution<br>
+                        • Screens: Create Screen (basic info), Edit Screen (all fields), View Screen (read-only)
+                    </p>
+                    
+                    <h4>The Relationship Chain:</h4>
+                    <p>
+                        <strong>Foundation → Schemes → Projects</strong><br>
+                        Everything flows from basic components into reusable schemes, which are then applied to projects. This allows you to maintain consistency while having flexibility for different project needs.
+                    </p>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>💡 Best Practices</h4>
+                    <ul>
+                        <li>Start with default JSM project templates</li>
+                        <li>Create schemes for different team types (IT, HR, Facilities)</li>
+                        <li>Use descriptive names for all components</li>
+                        <li>Document your configurations for future reference</li>
+                        <li>Test configurations in a sandbox project first</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Add hover effects for components
+        document.querySelectorAll('.component').forEach(component => {
+            component.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            component.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
