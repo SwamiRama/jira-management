@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Partner Support Escalation Process</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #232F3E 0%, #131A22 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #232F3E;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #FF9900;
+        }
+        
+        .flowchart-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            min-width: 800px;
+        }
+        
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .criteria-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .criteria-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .criteria-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #FFE5B4;
+        }
+        
+        .criteria-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .criteria-card li {
+            padding: 5px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .criteria-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #FFE5B4;
+            font-weight: bold;
+        }
+        
+        .timeframe-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .timeframe-table th {
+            background: #232F3E;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .timeframe-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .timeframe-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .timeframe-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-critical {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .badge-high {
+            background: #fd7e14;
+            color: white;
+        }
+        
+        .badge-medium {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .badge-low {
+            background: #28a745;
+            color: white;
+        }
+        
+        .process-steps {
+            counter-reset: step-counter;
+            margin-top: 20px;
+        }
+        
+        .process-step {
+            position: relative;
+            padding: 20px;
+            padding-left: 60px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #FF9900;
+        }
+        
+        .process-step:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: #FF9900;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .process-step h4 {
+            color: #232F3E;
+            margin-bottom: 10px;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AWS Partner Support Escalation Process</h1>
+            <p>Comprehensive Escalation Workflow & Documentation</p>
+        </div>
+        
+        <div class="content">
+            <!-- Main Flowchart -->
+            <div class="section">
+                <h2>Escalation Process Flowchart</h2>
+                <div class="flowchart-container">
+                    <svg viewBox="0 0 1200 1400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Define gradients and styles -->
+                        <defs>
+                            <linearGradient id="startGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#28a745;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#20c997;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="processGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#6610f2;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="decisionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#fd7e14;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="escalationGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#dc3545;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#c82333;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Start -->
+                        <rect x="500" y="20" width="200" height="60" rx="30" fill="url(#startGrad)"/>
+                        <text x="600" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Customer Issue Received</text>
+                        
+                        <!-- Arrow -->
+                        <line x1="600" y1="80" x2="600" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- L1 Support Assessment -->
+                        <rect x="475" y="120" width="250" height="80" rx="10" fill="url(#processGrad)"/>
+                        <text x="600" y="150" text-anchor="middle" fill="white" font-size="14" font-weight="bold">L1 Support Assessment</text>
+                        <text x="600" y="170" text-anchor="middle" fill="white" font-size="12">(Initial Triage)</text>
+                        <text x="600" y="190" text-anchor="middle" fill="white" font-size="11">SLA: 15 min response</text>
+                        
+                        <!-- Arrow -->
+                        <line x1="600" y1="200" x2="600" y2="240" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Decision: Can L1 Resolve? -->
+                        <polygon points="600,240 700,290 600,340 500,290" fill="url(#decisionGrad)"/>
+                        <text x="600" y="285" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Can L1</text>
+                        <text x="600" y="300" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Resolve?</text>
+                        
+                        <!-- Yes Branch -->
+                        <line x1="500" y1="290" x2="350" y2="290" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="425" y="280" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">YES</text>
+                        
+                        <rect x="200" y="260" width="150" height="60" rx="10" fill="url(#processGrad)"/>
+                        <text x="275" y="285" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Resolve & Document</text>
+                        <text x="275" y="305" text-anchor="middle" fill="white" font-size="11">Update KB</text>
+                        
+                        <!-- No Branch -->
+                        <line x1="600" y1="340" x2="600" y2="380" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="625" y="365" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">NO</text>
+                        
+                        <!-- L2 Assessment -->
+                        <rect x="475" y="380" width="250" height="80" rx="10" fill="url(#processGrad)"/>
+                        <text x="600" y="410" text-anchor="middle" fill="white" font-size="14" font-weight="bold">L2 Support Assessment</text>
+                        <text x="600" y="430" text-anchor="middle" fill="white" font-size="12">(Senior Engineer Review)</text>
+                        <text x="600" y="450" text-anchor="middle" fill="white" font-size="11">SLA: 1 hour escalation</text>
+                        
+                        <!-- Arrow -->
+                        <line x1="600" y1="460" x2="600" y2="500" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Decision: AWS Issue? -->
+                        <polygon points="600,500 700,550 600,600 500,550" fill="url(#decisionGrad)"/>
+                        <text x="600" y="540" text-anchor="middle" fill="white" font-size="13" font-weight="bold">AWS Platform</text>
+                        <text x="600" y="560" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Issue?</text>
+                        
+                        <!-- No Branch - Partner Resolution -->
+                        <line x1="500" y1="550" x2="350" y2="550" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="425" y="540" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">NO</text>
+                        
+                        <rect x="200" y="520" width="150" height="60" rx="10" fill="url(#processGrad)"/>
+                        <text x="275" y="545" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Partner Resolution</text>
+                        <text x="275" y="565" text-anchor="middle" fill="white" font-size="11">Implement Fix</text>
+                        
+                        <!-- Yes Branch - Check Severity -->
+                        <line x1="600" y1="600" x2="600" y2="640" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="625" y="625" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">YES</text>
+                        
+                        <!-- Severity Assessment -->
+                        <polygon points="600,640 700,690 600,740 500,690" fill="url(#decisionGrad)"/>
+                        <text x="600" y="685" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Severity</text>
+                        <text x="600" y="705" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Level?</text>
+                        
+                        <!-- Critical Path -->
+                        <line x1="700" y1="690" x2="850" y2="690" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="775" y="680" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">CRITICAL</text>
+                        
+                        <rect x="850" y="660" width="200" height="60" rx="10" fill="url(#escalationGrad)"/>
+                        <text x="950" y="685" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Immediate AWS Escalation</text>
+                        <text x="950" y="705" text-anchor="middle" fill="white" font-size="11">Phone + Priority Ticket</text>
+                        
+                        <!-- High/Medium Path -->
+                        <line x1="600" y1="740" x2="600" y2="780" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="650" y="765" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">HIGH/MEDIUM</text>
+                        
+                        <rect x="475" y="780" width="250" height="80" rx="10" fill="url(#escalationGrad)"/>
+                        <text x="600" y="810" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Create AWS Support Case</text>
+                        <text x="600" y="830" text-anchor="middle" fill="white" font-size="12">Severity: High/Medium</text>
+                        <text x="600" y="850" text-anchor="middle" fill="white" font-size="11">SLA: Based on Support Plan</text>
+                        
+                        <!-- Low Path -->
+                        <line x1="500" y1="690" x2="350" y2="690" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="425" y="680" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">LOW</text>
+                        
+                        <rect x="200" y="660" width="150" height="60" rx="10" fill="url(#processGrad)"/>
+                        <text x="275" y="685" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Standard AWS Case</text>
+                        <text x="275" y="705" text-anchor="middle" fill="white" font-size="11">24-48hr SLA</text>
+                        
+                        <!-- AWS Response -->
+                        <line x1="600" y1="860" x2="600" y2="900" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <line x1="950" y1="720" x2="950" y2="880" stroke="#333" stroke-width="2"/>
+                        <line x1="950" y1="880" x2="700" y2="880" stroke="#333" stroke-width="2"/>
+                        <line x1="700" y1="880" x2="700" y2="930" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <rect x="475" y="900" width="250" height="80" rx="10" fill="url(#processGrad)"/>
+                        <text x="600" y="930" text-anchor="middle" fill="white" font-size="14" font-weight="bold">AWS Support Response</text>
+                        <text x="600" y="950" text-anchor="middle" fill="white" font-size="12">Monitor & Collaborate</text>
+                        <text x="600" y="970" text-anchor="middle" fill="white" font-size="11">Update Customer</text>
+                        
+                        <!-- Resolution Loop -->
+                        <line x1="600" y1="980" x2="600" y2="1020" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <polygon points="600,1020 700,1070 600,1120 500,1070" fill="url(#decisionGrad)"/>
+                        <text x="600" y="1065" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Issue</text>
+                        <text x="600" y="1085" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Resolved?</text>
+                        
+                        <!-- No - Continue Working -->
+                        <line x1="700" y1="1070" x2="850" y2="1070" stroke="#333" stroke-width="2"/>
+                        <line x1="850" y1="1070" x2="850" y2="940" stroke="#333" stroke-width="2"/>
+                        <line x1="850" y1="940" x2="725" y2="940" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="775" y="1060" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">NO</text>
+                        
+                        <!-- Yes - Close Loop -->
+                        <line x1="600" y1="1120" x2="600" y2="1160" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="625" y="1145" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">YES</text>
+                        
+                        <!-- Closed Loop Process -->
+                        <rect x="450" y="1160" width="300" height="100" rx="10" fill="url(#startGrad)"/>
+                        <text x="600" y="1190" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Closed Loop Process</text>
+                        <text x="600" y="1210" text-anchor="middle" fill="white" font-size="12">• Document Resolution</text>
+                        <text x="600" y="1230" text-anchor="middle" fill="white" font-size="12">• Update Knowledge Base</text>
+                        <text x="600" y="1250" text-anchor="middle" fill="white" font-size="12">• Customer Confirmation</text>
+                        
+                        <!-- Final -->
+                        <line x1="600" y1="1260" x2="600" y2="1300" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <rect x="500" y="1300" width="200" height="60" rx="30" fill="url(#startGrad)"/>
+                        <text x="600" y="1335" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Case Closed</text>
+                        
+                        <!-- Arrow marker -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#333"/>
+                            </marker>
+                        </defs>
+                        
+                        <!-- Connect resolution paths back to closed loop -->
+                        <line x1="275" y1="320" x2="275" y2="1210" stroke="#333" stroke-width="1" stroke-dasharray="5,5"/>
+                        <line x1="275" y1="1210" x2="450" y2="1210" stroke="#333" stroke-width="1" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                        
+                        <line x1="275" y1="580" x2="275" y2="1210" stroke="#333" stroke-width="1" stroke-dasharray="5,5"/>
+                        
+                        <line x1="275" y1="720" x2="275" y2="1210" stroke="#333" stroke-width="1" stroke-dasharray="5,5"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Escalation Criteria -->
+            <div class="section">
+                <h2>Escalation Criteria by Category</h2>
+                <div class="criteria-grid">
+                    <div class="criteria-card">
+                        <h3>🔴 Critical (P1)</h3>
+                        <ul>
+                            <li>Production system down</li>
+                            <li>Data loss or corruption</li>
+                            <li>Security breach active</li>
+                            <li>Revenue impact >$10K/hour</li>
+                            <li>100+ users affected</li>
+                            <li>Compliance violation risk</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-card">
+                        <h3>🟠 High (P2)</h3>
+                        <ul>
+                            <li>Production degraded</li>
+                            <li>Core feature unavailable</li>
+                            <li>50-99 users affected</li>
+                            <li>Revenue impact <$10K/hour</li>
+                            <li>No workaround available</li>
+                            <li>Deadline < 24 hours</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-card">
+                        <h3>🟡 Medium (P3)</h3>
+                        <ul>
+                            <li>Non-critical feature issue</li>
+                            <li>10-49 users affected</li>
+                            <li>Workaround available</li>
+                            <li>Performance degradation</li>
+                            <li>Development blocked</li>
+                            <li>Deadline < 1 week</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-card">
+                        <h3>🟢 Low (P4)</h3>
+                        <ul>
+                            <li>General questions</li>
+                            <li><10 users affected</li>
+                            <li>Documentation requests</li>
+                            <li>Feature requests</li>
+                            <li>Minor bugs</li>
+                            <li>No immediate impact</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Timeframes -->
+            <div class="section">
+                <h2>Response & Escalation Timeframes</h2>
+                <table class="timeframe-table">
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Initial Response</th>
+                            <th>L2 Escalation</th>
+                            <th>AWS Escalation</th>
+                            <th>Update Frequency</th>
+                            <th>Resolution Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-critical">Critical P1</span></td>
+                            <td>15 minutes</td>
+                            <td>30 minutes</td>
+                            <td>Immediate</td>
+                            <td>Every 30 min</td>
+                            <td>4 hours</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-high">High P2</span></td>
+                            <td>30 minutes</td>
+                            <td>1 hour</td>
+                            <td>2 hours</td>
+                            <td>Every 2 hours</td>
+                            <td>8 hours</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-medium">Medium P3</span></td>
+                            <td>2 hours</td>
+                            <td>4 hours</td>
+                            <td>8 hours</td>
+                            <td>Daily</td>
+                            <td>48 hours</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-low">Low P4</span></td>
+                            <td>8 hours</td>
+                            <td>24 hours</td>
+                            <td>48 hours</td>
+                            <td>Weekly</td>
+                            <td>5 days</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Closed Loop Process -->
+            <div class="section">
+                <h2>Closed Loop Resolution Process</h2>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <h4>Issue Resolution Confirmation</h4>
+                        <p>AWS Support provides resolution. Partner engineer validates fix in customer environment. Customer confirms issue is resolved.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>Documentation Update</h4>
+                        <p>Update internal knowledge base with resolution details. Document any AWS-specific configurations or fixes. Create runbook for similar future issues.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>AWS Case Closure</h4>
+                        <p>Confirm with AWS Support that case can be closed. Provide feedback on AWS support experience if applicable. Save case reference for future.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>Customer Communication</h4>
+                        <p>Send formal resolution summary to customer. Include root cause analysis if requested. Provide preventive recommendations.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>Internal Review</h4>
+                        <p>Conduct post-incident review for P1/P2 issues. Update escalation procedures if needed. Share learnings with support team.</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>Metrics & Reporting</h4>
+                        <p>Log resolution time and escalation metrics. Update monthly AWS escalation report. Track SLA compliance and customer satisfaction.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AWS-Specific Escalation Types -->
+            <div class="section">
+                <h2>AWS Service-Specific Escalation Guidelines</h2>
+                <div class="criteria-grid">
+                    <div class="criteria-card">
+                        <h3>🖥️ EC2/Compute</h3>
+                        <ul>
+                            <li>Instance launch failures</li>
+                            <li>Unexpected terminations</li>
+                            <li>Network connectivity issues</li>
+                            <li>Performance degradation</li>
+                            <li>Spot instance interruptions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-card">
+                        <h3>🗄️ Storage (S3/EBS)</h3>
+                        <ul>
+                            <li>Access denied errors</li>
+                            <li>Data consistency issues</li>
+                            <li>Replication failures</li>
+                            <li>Volume attachment problems</li>
+                            <li>Throughput limitations</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-card">
+                        <h3>🌐 Networking</h3>
+                        <ul>
+                            <li>VPC connectivity issues</li>
+                            <li>Route table problems</li>
+                            <li>Security group conflicts</li>
+                            <li>Load balancer failures</li>
+                            <li>DNS resolution issues</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-card">
+                        <h3>🔒 Security/IAM</h3>
+                        <ul>
+                            <li>Permission denied errors</li>
+                            <li>Role assumption failures</li>
+                            <li>Key rotation issues</li>
+                            <li>Policy conflicts</li>
+                            <li>MFA/SSO problems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Document Version:</strong> 1.0 | <strong>Last Updated:</strong> Current | <strong>Repository:</strong> Central Documentation System</p>
+            <p>This document meets AWS Partner Network requirements for Partner-led Support escalation procedures.</p>
+        </div>
+    </div>
+</body>
+</html>
